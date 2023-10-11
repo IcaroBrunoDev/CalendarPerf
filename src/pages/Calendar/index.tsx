@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {useWindowDimensions} from 'react-native';
 
 import CalendarWrapper from 'components/Calendar';
@@ -12,16 +12,6 @@ import {useCalendar} from 'contexts/CalendarContext';
 const Calendar: React.FC = () => {
   const {width} = useWindowDimensions();
   const {calendar, currentDate} = useCalendar();
-
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (isLoading) {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 2500);
-    }
-  }, [isLoading]);
 
   const initialScrollIndex = useMemo(() => {
     if (!calendar.length) return false;
@@ -46,18 +36,17 @@ const Calendar: React.FC = () => {
 
   return (
     <PageWrapper>
-      {!isLoading && (
-        <StyledFlatList
-          horizontal
-          pagingEnabled
-          data={calendar}
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={item => `${item.monthName}-${item.year}`}
-          getItemLayout={getItemLayout}
-          extraData={calendar}
-          renderItem={({item}) => <CalendarWrapper {...item} />}
-        />
-      )}
+      <StyledFlatList
+        horizontal
+        pagingEnabled
+        data={calendar}
+        showsHorizontalScrollIndicator={false}
+        keyExtractor={item => `${item.monthName}-${item.year}`}
+        getItemLayout={getItemLayout}
+        extraData={calendar}
+        renderItem={({item}) => <CalendarWrapper {...item} />}
+      />
+
       <Fab>
         <FabAction
           title="Teste"
